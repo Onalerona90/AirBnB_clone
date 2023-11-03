@@ -88,18 +88,18 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         """
-        Usage: all <class name>
-        Function: Prints the string representation of all instances of the specified class
+        Usage: all [class name]
+        Function: Prints the string representation of all instances
         """
         class_name = line.strip()
-        if not class_name:
-            print("** class name missing **")
+        if class_name and not self.validate_class_existence(class_name):
             return
 
-        if not self.validate_class_existence(class_name):
-            return
-
-        instance_list = [str(obj) for obj in storage.classes()[class_name].all()]
+        instance_list = [
+            str(value) for key,
+            value in storage.all().items()
+            if not class_name or key.startswith(class_name + ".")
+        ]
         print(instance_list)
 
     def update_instance(self, class_name, instance_id, attribute, value):
