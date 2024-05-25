@@ -92,14 +92,14 @@ class HBNBCommand(cmd.Cmd):
         Function: Prints the string representation of all instances
         """
         class_name = line.strip()
-        if class_name and not self.validate_class_existence(class_name):
+        if not class_name:
+            print("** class name missing **")
             return
 
-        instance_list = [
-            str(value) for key,
-            value in storage.all().items()
-            if not class_name or key.startswith(class_name + ".")
-        ]
+        if not self.validate_class_existence(class_name):
+            return
+
+        instance_list = [str(obj) for obj in storage.classes()[class_name].all()]
         print(instance_list)
 
     def update_instance(self, class_name, instance_id, attribute, value):
